@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Ifeanyichukwu Akudinobi">
+    <meta name="creator" content="The MAHD SCIENTIST">
+    <title>Client1</title>
+    <style>
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        main {
+            background-color: #aaaaaa;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            width: 100%;
+        }
+
+        .container {
+            display: grid;
+            place-content: center;
+            position: relative;
+            width: 50%;
+            margin-right: auto;
+            margin-left: auto;
+            overflow: hidden;
+            flex: 1 0 1;
+            border-radius: 1rem;
+            --position: 50%;
+        }
+
+        .image-container {
+            max-width: 100%;
+            max-height: auto;
+            aspect-ratio: 1/1;
+        }
+
+        .slider-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: left;
+        }
+
+        .image-before {
+            position: absolute;
+            inset: 0;
+            width: var(--position);
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        .slider-line {
+            position: absolute;
+            inset: 0;
+            width: .2rem;
+            height: 100%;
+            background-color: #000;
+            z-index: 10;
+            left: var(--position);
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+
+        .slider:focus-visible~.slider-button {
+            outline: 5px solid black;
+            outline-offset: 3px;
+        }
+
+        .slider-button {
+            position: absolute;
+            background-color: #000;
+            color: #fff;
+            padding: .5rem;
+            border-radius: 100vw;
+            display: grid;
+            place-items: center;
+            top: 50%;
+            left: var(--position);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 100;
+            box-shadow: 10px 10px 1px hsla(0, 50%, 2%, .5);
+        }
+
+        .uploads {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            display: block;
+            padding: .8rem 1rem;
+            background-color: #000;
+            cursor: pointer;
+            color: #fff;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: .7rem;
+            font-weight: 600;
+            border-radius: .5rem;
+            margin: 1rem 5rem;
+            text-align: center;
+            transition: background-color .2s linear;
+        }
+
+        label:hover {
+            background-color: #f00;
+        }
+
+        footer {
+            padding: 1rem 2rem;
+            text-align: center;
+            background-color: #000000;
+            color: #ffffff;
+            opacity: .8;
+            font-size: .8rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        @media screen and (max-width: 912px) {
+            main {
+                flex-direction: column;
+            }
+
+            .container {
+                margin-top: 10%;
+                width: 100%;
+            }
+
+            label {
+                margin: 1rem 0;
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body onload="loadFile(['before-image', 'after-image'])">
+    <noscript>You need to enable JavaScript to run this program</noscript>
+    <main>
+        <div class="container">
+            <div class="image-container">
+                <img src="./images/before0.jpg" alt="Before image" id="before-image" class="image-before slider-image">
+                <img src="./images/after0.jpg" alt="After image" id="after-image" class="image-after slider-image">
+            </div>
+            <input type="range" min="0" max="100" value="50" class="slider"
+                aria-label="Percentage of before photo shown">
+            <div class="slider-line"></div>
+            <div class="slider-button" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                    viewBox="0 0 256 256">
+                    <path
+                        d="M136,40V216a8,8,0,0,1-16,0V40a8,8,0,0,1,16,0ZM96,120H35.31l18.35-18.34A8,8,0,0,0,42.34,90.34l-32,32a8,8,0,0,0,0,11.32l32,32a8,8,0,0,0,11.32-11.32L35.31,136H96a8,8,0,0,0,0-16Zm149.66,2.34-32-32a8,8,0,0,0-11.32,11.32L220.69,120H160a8,8,0,0,0,0,16h60.69l-18.35,18.34a8,8,0,0,0,11.32,11.32l32-32A8,8,0,0,0,245.66,122.34Z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+        <div class="uploads">
+            <label for="before-upload">Upload before-image &RightArrow;
+                <input type="file" accept="image/*" id="before-upload" onchange="preview(event, 'before-image')" hidden>
+            </label>
+            <label for="after-upload">Upload after-image &RightArrow;
+                <input type="file" accept="image/*" id="after-upload" onchange="preview(event, 'after-image')" hidden>
+            </label>
+        </div>
+    </main>
+    <footer>
+        Forged &amp; Designed by <strong>The MAHD SCIENTIST</str>
+    </footer>
+    <script>
+        const container = document.querySelector('.container');
+        document.querySelector('.slider').addEventListener('input', e => {
+            container.style.setProperty('--position', `${e.target.value}%`);
+        });
+
+        const preview = (e, id) => {
+            let el = document.getElementById(id)
+            el.src = URL.createObjectURL(e.target.files[0]);
+            el.onload = () => URL.revokeObjectURL(el.src);
+
+            let reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+
+            reader.onload = () => sessionStorage.setItem(`${id}`, `${reader.result}`)
+        }
+
+        const loadFile = (ids) => {
+            ids.forEach(id => {
+                let el = sessionStorage.getItem(`${id}`);
+                document.getElementById(id).src = el ? el : document.getElementById(id).src;
+            });
+        }
+    </script>
+</body>
+
+</html>
