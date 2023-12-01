@@ -104,6 +104,27 @@
             box-shadow: 10px 10px 1px hsla(0, 50%, 2%, .5);
         }
 
+        .before-text,
+        .after-text {
+            position: absolute;
+            background-color: #fff;
+            bottom: 0;
+            padding: .2rem;
+            font-family: cursive;
+            font-weight: 500;
+            font-size: .8rem;
+        }
+
+        .before-text {
+            left: 0;
+            width: var(--position);
+        }
+
+        .after-text {
+            right: 0;
+            width: calc(100% - var(--position));
+        }
+
         .uploads {
             display: flex;
             flex-direction: column;
@@ -163,6 +184,8 @@
             <div class="image-container">
                 <img src="./images/before0.jpg" alt="Before image" id="before-image" class="image-before slider-image">
                 <img src="./images/after0.jpg" alt="After image" id="after-image" class="image-after slider-image">
+                <span class="before-text">before</span>
+                <span class="after-text">after</span>
             </div>
             <input type="range" min="0" max="100" value="50" class="slider"
                 aria-label="Percentage of before photo shown">
